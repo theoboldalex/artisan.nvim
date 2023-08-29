@@ -1,21 +1,9 @@
-local width = 50
-local height = 1
-local window_width = (vim.api.nvim_win_get_width(0) / 2) - (width / 2)
-local window_height = (vim.api.nvim_win_get_height(0) / 2) - (height / 2)
-local opts = {
-    relative="win",
-    row = window_height,
-    col = window_width,
-    width = width,
-    height = height,
-    border = "rounded",
-    style = "minimal",
-    title = "PHP Artisan",
-    title_pos = "center",
-}
+ExecuteArtisanCommand = function(args)
+    local command = "php artisan " .. args
+    local handle = io.popen(command)
+    if handle ~= nil or handle ~= '' then
+        print(handle:read("*a"))
+    end
+end
 
-local buf = vim.api.nvim_create_buf(false, true)
-
-vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", ":close<cr>", {silent = true, nowait = true, noremap = true})
-vim.api.nvim_input("i")
-vim.api.nvim_open_win(buf, true, opts)
+vim.cmd([[ command! -nargs=1 Artisan :lua ExecuteArtisanCommand(<f-args>) ]])
